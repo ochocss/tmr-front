@@ -30,8 +30,13 @@ class RequestsService {
 
     }
 
-    async delete() {
-
+    async delete(id) {
+        let result; // TODO
+        await fetch(URL + this.endpoint, {method: "DELETE"})
+            .then(response => response.json())
+            .then(data => result = data)
+            .catch(err => console.error(err));
+        return result;
     }
 }
 
