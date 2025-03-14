@@ -29,6 +29,7 @@ function App() {
             <p><strong>Subject: </strong> {element.subjectId}</p>
             <p><strong>Description: </strong> {element.description}</p>
             <p><strong>Date: </strong> {element.date}</p>
+            <p><strong>Days left: </strong> {(Math.abs(new Date() - new Date(element.date)) / (1000 * 60 * 60 * 24))} days</p>
           </div>
           <br />
         </>
