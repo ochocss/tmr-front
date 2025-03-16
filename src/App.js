@@ -6,17 +6,18 @@ const ENDPOINT = "";
 
 function App() {
   const [tasks, setTasks] = useState(null);
+  const requestService = new RequestsService(ENDPOINT);
 
   useEffect(() => {
-    async function fetchMessage() {
+    async function readTasks() {
       try {
-        setTasks(await new RequestsService(ENDPOINT).get());
+        setTasks(await requestService.get());
       } catch (err) {
         console.error(err);
       }
     }
 
-    fetchMessage();
+    readTasks();
   }, []);
   
   return (
@@ -26,16 +27,20 @@ function App() {
         <p>No tasks created.</p>
       ) : (tasks.map(element => (
         <>
-          <div key={element.id} style={{border:"3px solid black"}}>
-            <div class="lefttaskcontainer">
+          <div key={element.id} id={element.id} style={{border:"3px solid black"}}>
+            <div className="lefttaskcontainer">
               <p><strong>Type: </strong> {element.typeId}</p>
               <p><strong>Subject: </strong> {element.subjectId}</p>
               <p><strong>Description: </strong> {element.description}</p>
               <p><strong>Date: </strong> {element.date}</p>
               <p><strong>Days left: </strong> {Math.abs(new Date() - new Date(element.date)) / (1000 * 60 * 60 * 24)}</p>
             </div>
-            <div class="righttaskcontainer">
-              <button className="button" type="button">Delete task</button>
+            <div className="righttaskcontainer">
+              <button className="deletebutton" type="button" onClick={async () => {
+                await requestService.delete(element.id);
+                document.getElementById(element.id).remove();
+              }}>Delete</button>
+              <button className="editbutton" type="button" onClick={async () => {}}>Edit</button>
             </div>
           </div>
           <br />
