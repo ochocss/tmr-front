@@ -14,20 +14,36 @@ class RequestsService {
         return result;
     }
 
-    async post() {
+    async post(task) { //create
         fetch(URL + this.endpoint, {
             method: "POST",
             headers: {
                 "Content-Type": "aplication/json"
             },
             body: JSON.stringify({
-                name: "a"
+                id: task.id,
+                typeId: task.typeId,
+                subjectId: task.subjectId,
+                desc: task.desc,
+                date: task.date
             })
         })
     }
 
-    async update() {
-
+    async put(task) {//update
+        fetch(URL + this.endpoint, {
+            method: "POST",
+            headers: {
+                "Content-Type": "aplication/json"
+            },
+            body: JSON.stringify({
+                id: task.id,
+                typeId: task.typeId,
+                subjectId: task.subjectId,
+                desc: task.desc,
+                date: task.date
+            })
+        })
     }
 
     async delete(id) {
