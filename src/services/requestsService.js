@@ -30,9 +30,9 @@ class RequestsService {
         })
     }
 
-    async put(task) {//update
+    async put(task) { //update
         fetch(URL + this.endpoint, {
-            method: "POST",
+            method: "PUT",
             headers: {
                 "Content-Type": "aplication/json"
             },
