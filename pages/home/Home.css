@@ -1,0 +1,25 @@
+.lefttaskcontainer {
+  text-align: left;
+  width: 50%;
+}
+
+.righttaskcontainer {
+  width: 100%;
+  text-align: center;
+}
+
+.deletebutton {
+  background-color: rgb(255, 134, 134);
+  padding: 12px 24px;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+} 
+
+.editbutton {
+  background-color: rgb(142, 134, 255);
+  padding: 12px 24px;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
