@@ -1,9 +1,9 @@
 import './Home.css';
 import RequestsService from "../../services/requestsService";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useId } from "react";
 import { taskTypes } from '../../model/taskTypes';
 
-const ENDPOINT = "";
+const ENDPOINT = "/";
 
 function Home() {
   const [tasks, setTasks] = useState(null);

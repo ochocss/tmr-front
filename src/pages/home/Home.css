@@ -9,7 +9,7 @@
 }
 
 .deletebutton {
-  background-color: rgb(255, 134, 134);
+  background-color: rgb(138, 9, 9);
   padding: 12px 24px;
   font-size: 16px;
   margin: 4px 2px;
@@ -17,7 +17,7 @@
 } 
 
 .editbutton {
-  background-color: rgb(142, 134, 255);
+  background-color: rgb(39, 32, 134);
   padding: 12px 24px;
   font-size: 16px;
   margin: 4px 2px;
