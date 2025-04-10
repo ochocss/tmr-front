@@ -1,6 +1,7 @@
 import './Home.css';
 import RequestsService from "../../services/requestsService";
 import React, { useEffect, useState } from "react";
+import { taskTypes } from '../../model/taskTypes';
 
 const ENDPOINT = "";
 
@@ -30,7 +31,7 @@ function Home() {
           <div key={element.id} id={element.id} style={{border:"3px solid black"}}>
             <div className="lefttaskcontainer">
               <p><strong>Type: </strong> {element.typeId}</p>
-              <p><strong>Subject: </strong> {element.subjectId}</p>
+              <p><strong>Subject: </strong> {taskTypes.get(element.subjectId)}</p>
               <p><strong>Description: </strong> {element.description}</p>
               <p><strong>Date: </strong> {element.date}</p>
               <p><strong>Days left: </strong> {Math.abs(new Date() - new Date(element.date)) / (1000 * 60 * 60 * 24)}</p>
