@@ -1,25 +1,47 @@
-.lefttaskcontainer {
-  text-align: left;
-  width: 50%;
+h1 {
+  margin-left: 2%;
+  font-weight: bold;
+  font-size: 64px;
 }
 
-.righttaskcontainer {
-  width: 100%;
+.task {
+  padding: 20px;
+  margin: 30px;
+  background-color: #1f1f1f;
+  border-radius: 8px;
+}
+
+.centralize {
+  display: flex;
+  justify-content: center;
+  margin: 10px 0;
+}
+
+.buttons {
   text-align: center;
 }
 
-.deletebutton {
-  background-color: rgb(138, 9, 9);
+button {
+  color: rgb(212, 212, 212);
   padding: 12px 24px;
   font-size: 16px;
   margin: 4px 2px;
   cursor: pointer;
+}
+
+.create-button {
+  background-color: rgb(7, 73, 12);
+  padding: 10px;
+  margin-left: 30px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.delete-button {
+  background-color: rgb(148, 19, 19);
 } 
 
-.editbutton {
-  background-color: rgb(39, 32, 134);
-  padding: 12px 24px;
-  font-size: 16px;
-  margin: 4px 2px;
-  cursor: pointer;
+.edit-button {
+  background-color: rgb(32, 24, 153);
+  margin-right: 12px;
 }
