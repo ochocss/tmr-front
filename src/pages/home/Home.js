@@ -31,7 +31,7 @@ function Home() {
       </div>
       {tasks ? (
         <>
-          <Link to="/create"><Button className="create-button" label="Create task" icon="pi pi-plus"
+          <Link to="/create"><Button className="create-button" label="Create task" icon="pi pi-plus" raised
               onClick={() => {
               
             }} /></Link>
@@ -44,7 +44,7 @@ function Home() {
                 <p><strong>Subject: </strong> {taskTypes.get(element.subjectId)}</p>
                 <p><strong>Description: </strong> {element.description}</p>
                 <p><strong>Date: </strong> {element.date}</p>
-                <p><strong>Days left: </strong> {Math.abs(new Date() - new Date(element.date)) / (1000 * 60 * 60 * 24)}</p>
+                <p><strong>Days left: </strong> {(Math.abs(new Date() - new Date(element.date)) / (1000 * 60 * 60 * 24)).toFixed(0)} days</p>
               </div>
               <div className="buttons">
                 <Link to="/edit"><Button className="edit-button" type="button" icon="pi pi-file-edit" label="Edit"
