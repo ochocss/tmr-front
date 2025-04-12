@@ -1,3 +1,4 @@
+import './index.css';
 import 'primereact/resources/themes/md-dark-deeppurple/theme.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
