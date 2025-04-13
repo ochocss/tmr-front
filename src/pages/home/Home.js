@@ -1,5 +1,5 @@
 import 'primeicons/primeicons.css';
-import './Home.css';
+import './home.css';
 import RequestsService from "../../services/requestsService";
 import React, { useEffect, useState, useId } from "react";
 import { taskTypes } from '../../model/taskTypes';
@@ -52,7 +52,7 @@ function Home() {
                   
                 }} /></Link>
                 <Button className="delete-button" type="button" icon="pi pi-trash" label="Delete"
-                  onClick={async () => {
+                onClick={async () => {
                   await requestService.delete(element.id);
                   document.getElementById(element.id).remove();
                 }} />
