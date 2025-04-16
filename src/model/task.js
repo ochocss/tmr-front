@@ -1,4 +1,4 @@
-class Task {
+export default class Task {
     constructor(id, typeId, subjectId, description, date) {
         this.id = id;
         this.typeId = typeId;

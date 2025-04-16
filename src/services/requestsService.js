@@ -1,6 +1,6 @@
 const URL = "http://localhost:8080"
 
-class RequestsService {
+export default class RequestsService {
     constructor(endpoint) {
         this.endpoint = endpoint
     }
@@ -18,16 +18,16 @@ class RequestsService {
         fetch(URL + this.endpoint, {
             method: "POST",
             headers: {
-                "Content-Type": "aplication/json"
+                "Content-Type": "application/json"
             },
             body: JSON.stringify({
                 id: task.id,
                 typeId: task.typeId,
                 subjectId: task.subjectId,
-                desc: task.desc,
+                description: task.description,
                 date: task.date
             })
-        })
+        });
     }
 
     async put(task) { //update
@@ -50,5 +50,3 @@ class RequestsService {
         await fetch(URL + this.endpoint + "/" + id, {method: "DELETE"});
     }
 }
-
-export default RequestsService;
