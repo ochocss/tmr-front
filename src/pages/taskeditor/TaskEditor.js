@@ -2,17 +2,17 @@ import './taskeditor.css';
 import { FloatLabel } from 'primereact/floatlabel';
 import { Dropdown } from 'primereact/dropdown';
 import { InputText } from 'primereact/inputtext';
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import RequestsService from '../../services/requestsService';
-import { taskTypes } from '../../model/taskTypes';
-import { Task } from '../../model/task';
+import taskTypes from '../../model/taskTypes';
+import Task from '../../model/task';
 import { Button } from 'primereact/button';
 import { Calendar } from 'primereact/calendar';
-import { Toast } from 'primereact/toast';
+import { Link, useNavigate } from 'react-router-dom';
 
 const ENDPOINT = "/create";
 
-function TaskEditor() {
+function TaskEditor({ toastRef }) {
   const [selectedType, setSelectedType] = useState(null);
   const [selectedSubject, setSelectedSubject] = useState(null);
   const [description, setDescription] = useState("");
@@ -21,13 +21,13 @@ function TaskEditor() {
   const types = Array.from(taskTypes.values());
   const [subjects, setSubjects] = useState(null);
 
-  const toast = useRef(null);
   const requestService = new RequestsService(ENDPOINT);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function readSubjects() {
       try {
-        setSubjects(await requestService.get()); // TODO get 
+        setSubjects(await requestService.get());
       } catch (err) {
         console.error(err);
       }
@@ -38,6 +38,12 @@ function TaskEditor() {
   
   return (
     <>
+      <div className="title-container">
+        <Link to="/">
+          <Button className="back-button" label="Back" icon="pi pi-chevron-left" raised />
+        </Link>
+        <label className="title">Create new task</label>
+      </div>
       {!subjects ? (
         <p>Loading...</p>
       ) : (
@@ -81,6 +87,13 @@ function TaskEditor() {
         </div>
       </>)}
     </>);
+}
+
+function getKeyByValue(map, searchValue) {
+  for (let [key, value] of map.entries()) {
+    if (value === searchValue)
+      return key;
+  }
 }
 
 export default TaskEditor;
