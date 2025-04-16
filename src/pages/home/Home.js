@@ -57,6 +57,7 @@ function Home({ toastRef }) {
                     await requestService.delete(task.id);
                     setTasks(prevTasks => prevTasks.filter(t => t.id !== task.id));
                   } catch (error) {
+                    toastRef.current.show({severity:'error', summary: 'Deletion failed', detail:'There was an error deleting the task.', life: 2000}); 
                   }
                 }} />
               </div>

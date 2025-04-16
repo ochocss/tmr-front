@@ -62,12 +62,23 @@ function TaskEditor() {
             <label htmlFor="dd-city">Date</label>
           </FloatLabel>
         </div>
-        <Button className="submit-button" type="button" icon="pi pi-plus" label="Submit"
-                onClick={async () => {
-                  selectedType && selectedSubject && description && date ? await requestService.post(new Task(-1, selectedType, selectedSubject, description, date)) :
-                  toast.current.show({severity:'warn', summary: 'Invalid task', detail:'Fill in all fields.', life: 2000});
-        }} />
-        <Toast ref={toast} position='bottom-right'/>
+
+        <div className="submit-button-container">
+          <Button className="submit-button" type="button" icon="pi pi-plus" label="Submit"
+                  onClick={async () => {
+                    if(selectedType && selectedSubject && description && date) {
+                      try {
+                        await requestService.post(new Task(-1, getKeyByValue(taskTypes ,selectedType), subjects.indexOf(selectedSubject), description, date))
+                        toastRef.current.show({severity:'success', summary: 'Task created', detail:'The task was successfully submitted.', life: 2000});
+                        navigate("/");
+                      } catch {
+                        toastRef.current.show({severity:'error', summary: 'Submission failed', detail:'There was an error creating the task.', life: 2000}); 
+                      }
+                    } else {
+                      toastRef.current.show({severity:'warn', summary: 'Invalid task', detail:'Fill in all fields.', life: 2000}); 
+                    }
+          }} />
+        </div>
       </>)}
     </>);
 }
