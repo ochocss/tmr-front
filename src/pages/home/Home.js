@@ -5,11 +5,14 @@ import React, { useEffect, useState } from "react";
 import taskTypes from '../../model/taskTypes';
 import { Button } from 'primereact/button';
 import { Link } from 'react-router-dom';
+import { Dialog } from 'primereact/dialog';
 
 const ENDPOINT = "";
 
 function Home({ toastRef }) {
   const [tasks, setTasks] = useState(null);
+  const [visible, setVisible] = useState(false);
+
   const requestService = new RequestsService(ENDPOINT);
 
   useEffect(() => {
@@ -54,12 +57,22 @@ function Home({ toastRef }) {
                 <Button className="delete-button" type="button" icon="pi pi-trash" label="Delete"
                 onClick={async () => {
                   try {
-                    await requestService.delete(task.id);
-                    setTasks(prevTasks => prevTasks.filter(t => t.id !== task.id));
+                    setVisible(true);
                   } catch (error) {
                     toastRef.current.show({severity:'error', summary: 'Deletion failed', detail:'There was an error deleting the task.', life: 2000}); 
                   }
                 }} />
+                <Dialog header="Are you sure you want to delete this task?" visible={visible} style={{ width: '50vw' }} 
+                onHide={() => {if (!visible) return; setVisible(false); }} footer={
+                  <>
+                    <Button className="confirm-deletion-button" label="Yes" icon="pi pi-check" onClick={async () => {
+                        setVisible(false);
+                        await requestService.delete(task.id);
+                        setTasks(prevTasks => prevTasks.filter(t => t.id !== task.id));
+                      }} />
+                    <Button className="cancel-deletion-button" label="No" icon="pi pi-times" onClick={() => setVisible(false)} autoFocus />
+                  </>
+                } />
               </div>
             </div>
           )))

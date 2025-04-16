@@ -55,3 +55,11 @@ button {
 .edit-button:hover {
   background-color: rgb(8, 0, 126);
 }
+
+.confirm-deletion-button {
+  background-color: rgb(168, 1, 1);
+}
+
+.cancel-deletion-button {
+  background-color: rgb(70, 70, 70);
+}
