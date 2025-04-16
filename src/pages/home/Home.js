@@ -66,7 +66,9 @@ function Home({ toastRef }) {
           )}
         </>
       ) : (
-        <p>Loading...</p>
+        <div className="centralize">
+          <i className="pi pi-spin pi-spinner" style={{ fontSize: '3rem', margin: '20px' }}></i>
+        </div>
       )}
     </>
   );
