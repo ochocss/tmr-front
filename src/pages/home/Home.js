@@ -1,14 +1,14 @@
 import 'primeicons/primeicons.css';
 import './home.css';
 import RequestsService from "../../services/requestsService";
-import React, { useEffect, useState, useId } from "react";
-import { taskTypes } from '../../model/taskTypes';
+import React, { useEffect, useState } from "react";
+import taskTypes from '../../model/taskTypes';
 import { Button } from 'primereact/button';
 import { Link } from 'react-router-dom';
 
 const ENDPOINT = "";
 
-function Home() {
+function Home({ toastRef }) {
   const [tasks, setTasks] = useState(null);
   const requestService = new RequestsService(ENDPOINT);
 
@@ -31,20 +31,20 @@ function Home() {
       </div>
       {tasks ? (
         <>
-          <Link to="/create"><Button className="create-button" label="Create task" icon="pi pi-plus" raised
-              onClick={() => {
-              
-            }} /></Link>
+          <Link to="/create">
+            <Button className="create-button" label="Create task" icon="pi pi-plus" raised />
+          </Link>
+          
           {(tasks.length === 0 ? (
             <p>No tasks created.</p>
-          ) : (tasks.map(element => (
-            <div className="task" key={element.id} id={element.id}>
+          ) : (tasks.map(task => (
+            <div className="task" key={task.id} id={task.id}>
               <div>
-                <p><strong>Type: </strong> {element.typeId}</p>
-                <p><strong>Subject: </strong> {taskTypes.get(element.subjectId)}</p>
-                <p><strong>Description: </strong> {element.description}</p>
-                <p><strong>Date: </strong> {element.date}</p>
-                <p><strong>Days left: </strong> {(Math.abs(new Date() - new Date(element.date)) / (1000 * 60 * 60 * 24)).toFixed(0)} days</p>
+                <p><strong>Type: </strong> {taskTypes.get(task.typeId)}</p>
+                <p><strong>Subject: </strong> {/* TODO: juntar setsubject das 2 pag na App e passar por props */} </p> 
+                <p><strong>Description: </strong> {task.description}</p>
+                <p><strong>Date: </strong> {task.date}</p>
+                <p><strong>Days left: </strong> {((new Date(task.date) - new Date()) / (1000 * 60 * 60 * 24)).toFixed(0)} days</p>
               </div>
               <div className="buttons">
                 <Link to="/edit"><Button className="edit-button" type="button" icon="pi pi-file-edit" label="Edit"
@@ -53,8 +53,11 @@ function Home() {
                 }} /></Link>
                 <Button className="delete-button" type="button" icon="pi pi-trash" label="Delete"
                 onClick={async () => {
-                  await requestService.delete(element.id);
-                  document.getElementById(element.id).remove();
+                  try {
+                    await requestService.delete(task.id);
+                    setTasks(prevTasks => prevTasks.filter(t => t.id !== task.id));
+                  } catch (error) {
+                  }
                 }} />
               </div>
             </div>
