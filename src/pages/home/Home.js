@@ -26,7 +26,7 @@ function Home({ toastRef, subjectsRef }) {
 
     readTasks();
   }, []);
-  console.log(subjectsRef);
+  
   return (
     <>
       <div className="centralize">
