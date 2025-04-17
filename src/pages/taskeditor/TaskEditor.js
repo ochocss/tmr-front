@@ -2,7 +2,7 @@ import './taskeditor.css';
 import { FloatLabel } from 'primereact/floatlabel';
 import { Dropdown } from 'primereact/dropdown';
 import { InputText } from 'primereact/inputtext';
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import RequestsService from '../../services/requestsService';
 import taskTypes from '../../model/taskTypes';
 import Task from '../../model/task';
@@ -12,29 +12,16 @@ import { Link, useNavigate } from 'react-router-dom';
 
 const ENDPOINT = "/create";
 
-function TaskEditor({ toastRef }) {
+function TaskEditor({ toastRef, subjectsRef }) {
   const [selectedType, setSelectedType] = useState(null);
   const [selectedSubject, setSelectedSubject] = useState(null);
   const [description, setDescription] = useState("");
   const [date, setDate] = useState(null);
 
   const types = Array.from(taskTypes.values());
-  const [subjects, setSubjects] = useState(null);
 
   const requestService = new RequestsService(ENDPOINT);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    async function readSubjects() {
-      try {
-        setSubjects(await requestService.get());
-      } catch (err) {
-        console.error(err);
-      }
-    }
-
-    readSubjects();
-  }, []);
   
   return (
     <>
@@ -44,7 +31,7 @@ function TaskEditor({ toastRef }) {
         </Link>
         <label className="title">Create new task</label>
       </div>
-      {!subjects ? (
+      {!subjectsRef ? (
         <p>Loading...</p>
       ) : (
       <>
@@ -55,7 +42,7 @@ function TaskEditor({ toastRef }) {
             <label htmlFor="dd-city">Type</label>
           </FloatLabel>
           <FloatLabel>
-            <Dropdown value={selectedSubject} onChange={(e) => setSelectedSubject(e.value)} options={subjects} optionLabel="name"
+            <Dropdown value={selectedSubject} onChange={(e) => setSelectedSubject(e.value)} options={subjectsRef} optionLabel="name"
                       placeholder="Select Subject" checkmark={true} highlightOnSelect={true} />
             <label htmlFor="dd-city">Subject</label>
           </FloatLabel>
@@ -74,7 +61,7 @@ function TaskEditor({ toastRef }) {
                   onClick={async () => {
                     if(selectedType && selectedSubject && description && date) {
                       try {
-                        await requestService.post(new Task(-1, getKeyByValue(taskTypes ,selectedType), subjects.indexOf(selectedSubject), description, date))
+                        await requestService.post(new Task(-1, getKeyByValue(taskTypes ,selectedType), subjectsRef.indexOf(selectedSubject), description, date))
                         toastRef.current.show({severity:'success', summary: 'Task created', detail:'The task was successfully submitted.', life: 2000});
                         navigate("/");
                       } catch {

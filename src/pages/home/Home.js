@@ -9,7 +9,7 @@ import { Dialog } from 'primereact/dialog';
 
 const ENDPOINT = "";
 
-function Home({ toastRef }) {
+function Home({ toastRef, subjectsRef }) {
   const [tasks, setTasks] = useState(null);
   const [visible, setVisible] = useState(false);
 
@@ -26,13 +26,13 @@ function Home({ toastRef }) {
 
     readTasks();
   }, []);
-  
+  console.log(subjectsRef);
   return (
     <>
       <div className="centralize">
         <h1>Task List</h1>
       </div>
-      {tasks ? (
+      {tasks && subjectsRef ? (
         <>
           <Link to="/create">
             <Button className="create-button" label="Create task" icon="pi pi-plus" raised />
@@ -44,7 +44,7 @@ function Home({ toastRef }) {
             <div className="task" key={task.id} id={task.id}>
               <div>
                 <p><strong>Type: </strong> {taskTypes.get(task.typeId)}</p>
-                <p><strong>Subject: </strong> {/* TODO: juntar setsubject das 2 pag na App e passar por props */} </p> 
+                <p><strong>Subject: </strong> {subjectsRef[task.subjectId]} </p> 
                 <p><strong>Description: </strong> {task.description}</p>
                 <p><strong>Date: </strong> {task.date}</p>
                 <p><strong>Days left: </strong> {((new Date(task.date) - new Date()) / (1000 * 60 * 60 * 24)).toFixed(0)} days</p>
