@@ -39,7 +39,7 @@ function Home({ toastRef, subjectsRef }) {
           </Link>
           
           {(tasks.length === 0 ? (
-            <p>No tasks created.</p>
+            <p className="no-task-p">No tasks created.</p>
           ) : (tasks.map(task => (
             <div className="task" key={task.id} id={task.id}>
               <div>

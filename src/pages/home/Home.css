@@ -3,6 +3,11 @@ h1 {
   font-size: 64px;
 }
 
+.no-task-p {
+  font-size: 20px;
+  margin: 30px;
+}
+
 .task {
   padding: 20px;
   margin: 30px;
