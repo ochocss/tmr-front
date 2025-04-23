@@ -53,6 +53,12 @@ export default class RequestsService {
     }
 
     async delete(id) {
-        await fetch(URL + this.endpoint + "/" + id, {method: "DELETE"});
+        let result;
+        
+        await fetch(URL + this.endpoint + "/" + id, {method: "DELETE"}).then(response => result = response);
+
+        if(result) {
+            return result.ok;
+        }
     }
 }

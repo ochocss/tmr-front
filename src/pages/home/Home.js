@@ -67,8 +67,12 @@ function Home({ toastRef, subjectsRef }) {
                   <>
                     <Button className="confirm-deletion-button" label="Yes" icon="pi pi-check" onClick={async () => {
                         setVisible(false);
-                        await requestService.delete(task.id);
-                        setTasks(prevTasks => prevTasks.filter(t => t.id !== task.id));
+                        if(await requestService.delete(task.id)) {
+                          toastRef.current.show({severity:'success', summary: 'Task deleted', detail:'The task was successfully deleted.', life: 3000});
+                          setTasks(prevTasks => prevTasks.filter(t => t.id !== task.id));
+                        } else {
+                          toastRef.current.show({severity:'error', summary: 'Deletion failed', detail:'There was an server error. Try again later.', life: 3000});
+                        }
                       }} />
                     <Button className="cancel-deletion-button" label="No" icon="pi pi-times" onClick={() => setVisible(false)} autoFocus />
                   </>
