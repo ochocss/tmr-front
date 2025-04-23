@@ -61,14 +61,18 @@ function TaskEditor({ toastRef, subjectsRef }) {
                   onClick={async () => {
                     if(selectedType && selectedSubject && description && date) {
                       try {
-                        await requestService.post(new Task(-1, getKeyByValue(taskTypes ,selectedType), subjectsRef.indexOf(selectedSubject), description, date))
-                        toastRef.current.show({severity:'success', summary: 'Task created', detail:'The task was successfully submitted.', life: 2000});
-                        navigate("/");
-                      } catch {
-                        toastRef.current.show({severity:'error', summary: 'Submission failed', detail:'There was an error creating the task.', life: 2000}); 
+                        if(await requestService.post(new Task(-1, getKeyByValue(taskTypes, selectedType), subjectsRef.indexOf(selectedSubject) + 1, description, date))) {
+                          // status 2XX
+                          toastRef.current.show({severity:'success', summary: 'Task created', detail:'The task was successfully submitted.', life: 3000});
+                          navigate("/");
+                        } else { // status 5XX
+                          toastRef.current.show({severity:'error', summary: 'Submission failed', detail:'There was an server error. Try again later.', life: 3000});
+                        }
+                      } catch { // other front errors
+                        toastRef.current.show({severity:'error', summary: 'Submission failed', detail:'There was an error creating the task.', life: 3000}); 
                       }
-                    } else {
-                      toastRef.current.show({severity:'warn', summary: 'Invalid task', detail:'Fill in all fields.', life: 2000}); 
+                    } else { // warn if any of the fields are empty
+                      toastRef.current.show({severity:'warn', summary: 'Invalid task', detail:'Fill in all fields.', life: 3000}); 
                     }
           }} />
         </div>

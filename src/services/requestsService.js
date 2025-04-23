@@ -15,7 +15,9 @@ export default class RequestsService {
     }
 
     async post(task) { //create
-        fetch(URL + this.endpoint, {
+        let result;
+
+        await fetch(URL + this.endpoint, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -27,7 +29,11 @@ export default class RequestsService {
                 description: task.description,
                 date: task.date
             })
-        });
+        }).then(response => result = response);
+
+        if(result) {
+            return result.ok;
+        }
     }
 
     async put(task) { //update
