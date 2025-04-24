@@ -44,7 +44,7 @@ function Home({ toastRef, subjectsRef }) {
             <div className="task" key={task.id} id={task.id}>
               <div>
                 <p><strong>Type: </strong> {taskTypes.get(task.typeId)}</p>
-                <p><strong>Subject: </strong> {subjectsRef[task.subjectId]} </p> 
+                <p><strong>Subject: </strong> {subjects[task.subjectId-1]} </p> 
                 <p><strong>Description: </strong> {task.description}</p>
                 <p><strong>Date: </strong> {task.date}</p>
                 <p><strong>Days left: </strong> {((new Date(task.date) - new Date()) / (1000 * 60 * 60 * 24)).toFixed(0)} days</p>
