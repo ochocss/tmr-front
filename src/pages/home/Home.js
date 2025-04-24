@@ -1,5 +1,5 @@
 import 'primeicons/primeicons.css';
-import './home.css';
+import './Home.css';
 import RequestsService from "../../services/requestsService";
 import React, { useEffect, useState } from "react";
 import taskTypes from '../../model/taskTypes';
@@ -9,16 +9,14 @@ import { Dialog } from 'primereact/dialog';
 
 const ENDPOINT = "";
 
-function Home({ toastRef, subjectsRef }) {
+function Home({ toastRef, subjects, setEditingTask }) {
   const [tasks, setTasks] = useState(null);
   const [visible, setVisible] = useState(false);
-
-  const requestService = new RequestsService(ENDPOINT);
 
   useEffect(() => {
     async function readTasks() {
       try {
-        setTasks(await requestService.get());
+        setTasks(await RequestsService.get(ENDPOINT));
       } catch (err) {
         console.error(err);
       }
@@ -32,10 +30,10 @@ function Home({ toastRef, subjectsRef }) {
       <div className="centralize">
         <h1>Task List</h1>
       </div>
-      {tasks && subjectsRef ? (
+      {tasks && subjects ? (
         <>
           <Link to="/create">
-            <Button className="create-button" label="Create task" icon="pi pi-plus" raised />
+            <Button className="create-button" label="Create new task" icon="pi pi-plus" raised />
           </Link>
           
           {(tasks.length === 0 ? (
@@ -52,7 +50,7 @@ function Home({ toastRef, subjectsRef }) {
               <div className="buttons">
                 <Link to="/edit"><Button className="edit-button" type="button" icon="pi pi-file-edit" label="Edit"
                   onClick={() => {
-                  
+                    setEditingTask(task);
                 }} /></Link>
                 <Button className="delete-button" type="button" icon="pi pi-trash" label="Delete"
                 onClick={async () => {
@@ -67,7 +65,7 @@ function Home({ toastRef, subjectsRef }) {
                   <>
                     <Button className="confirm-deletion-button" label="Yes" icon="pi pi-check" onClick={async () => {
                         setVisible(false);
-                        if(await requestService.delete(task.id)) {
+                        if(await RequestsService.delete(ENDPOINT, task.id)) {
                           toastRef.current.show({severity:'success', summary: 'Task deleted', detail:'The task was successfully deleted.', life: 3000});
                           setTasks(prevTasks => prevTasks.filter(t => t.id !== task.id));
                         } else {

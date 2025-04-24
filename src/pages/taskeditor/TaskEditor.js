@@ -2,7 +2,7 @@ import './taskeditor.css';
 import { FloatLabel } from 'primereact/floatlabel';
 import { Dropdown } from 'primereact/dropdown';
 import { InputText } from 'primereact/inputtext';
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import RequestsService from '../../services/requestsService';
 import taskTypes from '../../model/taskTypes';
 import Task from '../../model/task';
@@ -10,9 +10,7 @@ import { Button } from 'primereact/button';
 import { Calendar } from 'primereact/calendar';
 import { Link, useNavigate } from 'react-router-dom';
 
-const ENDPOINT = "/create";
-
-function TaskEditor({ toastRef, subjectsRef }) {
+function TaskEditor({ toastRef, subjects, editingTask, setEditingTask }) {
   const [selectedType, setSelectedType] = useState(null);
   const [selectedSubject, setSelectedSubject] = useState(null);
   const [description, setDescription] = useState("");
@@ -20,8 +18,23 @@ function TaskEditor({ toastRef, subjectsRef }) {
 
   const types = Array.from(taskTypes.values());
 
-  const requestService = new RequestsService(ENDPOINT);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if(editingTask) {
+      if(typeof editingTask.date === "string") {
+        editingTask.date = new Date(editingTask.date.replace(/-/g, '/'));
+      }
+
+      setSelectedType(taskTypes.get(editingTask.typeId));
+      setSelectedSubject(subjects[editingTask.subjectId-1]);
+      setDescription(editingTask.description);
+      setDate(editingTask.date);
+    } else if(window.location.pathname === "/edit") {
+        navigate("/");
+        return;
+    }
+  }, []);
   
   return (
     <>
@@ -31,7 +44,7 @@ function TaskEditor({ toastRef, subjectsRef }) {
         </Link>
         <label className="title">Create new task</label>
       </div>
-      {!subjectsRef ? (
+      {!subjects ? (
         <p>Loading...</p>
       ) : (
       <>
@@ -42,7 +55,7 @@ function TaskEditor({ toastRef, subjectsRef }) {
             <label htmlFor="dd-city">Type</label>
           </FloatLabel>
           <FloatLabel>
-            <Dropdown value={selectedSubject} onChange={(e) => setSelectedSubject(e.value)} options={subjectsRef} optionLabel="name"
+            <Dropdown value={selectedSubject} onChange={(e) => setSelectedSubject(e.value)} options={subjects} optionLabel="name"
                       placeholder="Select Subject" checkmark={true} highlightOnSelect={true} />
             <label htmlFor="dd-city">Subject</label>
           </FloatLabel>
@@ -60,16 +73,38 @@ function TaskEditor({ toastRef, subjectsRef }) {
           <Button className="submit-button" type="button" icon="pi pi-plus" label="Submit"
                   onClick={async () => {
                     if(selectedType && selectedSubject && description && date) {
-                      try {
-                        if(await requestService.post(new Task(-1, getKeyByValue(taskTypes, selectedType), subjectsRef.indexOf(selectedSubject) + 1, description, date))) {
-                          // status 2XX
-                          toastRef.current.show({severity:'success', summary: 'Task created', detail:'The task was successfully submitted.', life: 3000});
-                          navigate("/");
-                        } else { // status 5XX
-                          toastRef.current.show({severity:'error', summary: 'Submission failed', detail:'There was an server error. Try again later.', life: 3000});
+                      if(!editingTask) {
+                        try { // try create
+                          if(await RequestsService.post("/create", new Task(-1, getKeyByValue(taskTypes, selectedType), subjects.indexOf(selectedSubject) + 1, description, date))) {
+                            // status 2XX
+                            toastRef.current.show({severity:'success', summary: 'Task created', detail:'The task was successfully submitted.', life: 3000});
+                            navigate("/");
+                          } else { // status 5XX
+                            toastRef.current.show({severity:'error', summary: 'Submission failed', detail:'There was an server error. Try again later.', life: 3000});
+                          }
+                        } catch { // other front errors
+                          toastRef.current.show({severity:'error', summary: 'Submission failed', detail:'There was an error creating the task.', life: 3000}); 
                         }
-                      } catch { // other front errors
-                        toastRef.current.show({severity:'error', summary: 'Submission failed', detail:'There was an error creating the task.', life: 3000}); 
+                      } else { // update
+                        let newTask = new Task(editingTask.id, getKeyByValue(taskTypes, selectedType), subjects.indexOf(selectedSubject) + 1, description, date);
+
+                        if(JSON.stringify(newTask) === JSON.stringify(editingTask)) { // check if any change has been made
+                          toastRef.current.show({severity:'warn', summary: 'Invalid task', detail:'Change at least one field.', life: 3000}); 
+                        } else {
+                          try { // try update
+                            if(await RequestsService.put("/edit/" + newTask.id, newTask)) {
+                              // status 2XX
+                              // TODO: understand why its showing error when updating succesfully. the request returns 'undefined'
+                              toastRef.current.show({severity:'success', summary: 'Task updated', detail:'The task was successfully updated.', life: 3000});
+                              navigate("/");
+                              setEditingTask(null);
+                            } else { // status 5XX
+                              toastRef.current.show({severity:'error', summary: 'Submission failed', detail:'There was an server error. Try again later.', life: 3000});
+                            }
+                          } catch { // other front errors
+                            toastRef.current.show({severity:'error', summary: 'Submission failed', detail:'There was an error updating the task.', life: 3000}); 
+                          }
+                        }
                       }
                     } else { // warn if any of the fields are empty
                       toastRef.current.show({severity:'warn', summary: 'Invalid task', detail:'Fill in all fields.', life: 3000}); 

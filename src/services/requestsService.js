@@ -1,23 +1,20 @@
 const URL = "http://localhost:8080"
 
 export default class RequestsService {
-    constructor(endpoint) {
-        this.endpoint = endpoint
-    }
 
-    async get() {
+    static async get(endpoint) {
         let result;
-        await fetch(URL + this.endpoint, {method: "GET"})
+        await fetch(URL + endpoint, {method: "GET"})
             .then(response => response.json())
             .then(data => result = data)
             .catch(err => console.error(err));
         return result;
     }
 
-    async post(task) { //create
+    static async post(endpoint, task) { //create
         let result;
 
-        await fetch(URL + this.endpoint, {
+        await fetch(URL + endpoint, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -36,26 +33,32 @@ export default class RequestsService {
         }
     }
 
-    async put(task) { //update
-        fetch(URL + this.endpoint, {
+    static async put(endpoint, task) { //update
+        let result;
+
+        fetch(URL + endpoint, {
             method: "PUT",
             headers: {
-                "Content-Type": "aplication/json"
+                "Content-Type": "application/json"
             },
             body: JSON.stringify({
                 id: task.id,
                 typeId: task.typeId,
                 subjectId: task.subjectId,
-                desc: task.desc,
+                description: task.description,
                 date: task.date
             })
-        })
+        }).then(response => result = response);
+
+        if(result) {
+            return result.ok;
+        }
     }
 
-    async delete(id) {
+    static async delete(endpoint, id) {
         let result;
         
-        await fetch(URL + this.endpoint + "/" + id, {method: "DELETE"}).then(response => result = response);
+        await fetch(URL + endpoint + "/" + id, {method: "DELETE"}).then(response => result = response);
 
         if(result) {
             return result.ok;
