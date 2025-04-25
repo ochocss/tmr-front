@@ -36,7 +36,7 @@ export default class RequestsService {
     static async put(endpoint, task) { //update
         let result;
 
-        fetch(URL + endpoint, {
+        await fetch(URL + endpoint, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
