@@ -34,7 +34,7 @@ function TaskEditor({ toastRef, subjects, editingTask, setEditingTask }) {
         navigate("/");
         return;
     }
-  }, []);
+  }, [editingTask, navigate, subjects]);
   
   return (
     <>
