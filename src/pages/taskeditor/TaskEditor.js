@@ -60,7 +60,12 @@ function TaskEditor({ toastRef, subjects, editingTask, setEditingTask }) {
             <label htmlFor="dd-city">Subject</label>
           </FloatLabel>
           <FloatLabel>
-            <InputText value={description} onChange={(e) => setDescription(e.target.value)} />
+            <InputText value={description} onChange={(e) => {
+              if(e.target.value.length > 49) {
+                e.target.value = e.target.value.substring(0, 50)
+              }
+              setDescription(e.target.value);
+            }}/>
             <label htmlFor="description">Description</label>
           </FloatLabel>
           <FloatLabel>
