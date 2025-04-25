@@ -74,7 +74,7 @@ function TaskEditor({ toastRef, subjects, editingTask, setEditingTask }) {
                   onClick={async () => {
                     if(selectedType && selectedSubject && description && date) {
                       if(!editingTask) {
-                        try { // try create
+                        try { // create
                           if(await RequestsService.post("/create", new Task(-1, getKeyByValue(taskTypes, selectedType), subjects.indexOf(selectedSubject) + 1, description, date))) {
                             // status 2XX
                             toastRef.current.show({severity:'success', summary: 'Task created', detail:'The task was successfully submitted.', life: 3000});
@@ -91,10 +91,9 @@ function TaskEditor({ toastRef, subjects, editingTask, setEditingTask }) {
                         if(JSON.stringify(newTask) === JSON.stringify(editingTask)) { // check if any change has been made
                           toastRef.current.show({severity:'warn', summary: 'Invalid task', detail:'Change at least one field.', life: 3000}); 
                         } else {
-                          try { // try update
+                          try {
                             if(await RequestsService.put("/edit/" + newTask.id, newTask)) {
                               // status 2XX
-                              // TODO: understand why its showing error when updating succesfully. the request returns 'undefined'
                               toastRef.current.show({severity:'success', summary: 'Task updated', detail:'The task was successfully updated.', life: 3000});
                               navigate("/");
                               setEditingTask(null);
