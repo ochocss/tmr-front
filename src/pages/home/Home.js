@@ -57,7 +57,7 @@ function Home({ toastRef, subjects, setEditingTask }) {
                   try {
                     setVisible(true);
                   } catch (error) {
-                    toastRef.current.show({severity:'error', summary: 'Deletion failed', detail:'There was an error deleting the task.', life: 2000}); 
+                    toastRef.current.show({severity:'error', summary: 'Deletion failed', detail:'There was an error deleting the task.', life: 1500}); 
                   }
                 }} />
                 <Dialog header="Are you sure you want to delete this task?" visible={visible} style={{ width: '50vw' }} 
@@ -66,10 +66,10 @@ function Home({ toastRef, subjects, setEditingTask }) {
                     <Button className="confirm-deletion-button" label="Yes" icon="pi pi-check" onClick={async () => {
                         setVisible(false);
                         if(await RequestsService.delete(ENDPOINT, task.id)) {
-                          toastRef.current.show({severity:'success', summary: 'Task deleted', detail:'The task was successfully deleted.', life: 3000});
+                          toastRef.current.show({severity:'success', summary: 'Task deleted', detail:'The task was successfully deleted.', life: 1500});
                           setTasks(prevTasks => prevTasks.filter(t => t.id !== task.id));
                         } else {
-                          toastRef.current.show({severity:'error', summary: 'Deletion failed', detail:'There was an server error. Try again later.', life: 3000});
+                          toastRef.current.show({severity:'error', summary: 'Deletion failed', detail:'There was an server error. Try again later.', life: 1500});
                         }
                       }} />
                     <Button className="cancel-deletion-button" label="No" icon="pi pi-times" onClick={() => setVisible(false)} autoFocus />
