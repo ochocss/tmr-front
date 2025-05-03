@@ -5,13 +5,19 @@ import React, { useEffect, useState } from "react";
 import taskTypes from '../../model/taskTypes';
 import { Button } from 'primereact/button';
 import { Link } from 'react-router-dom';
+import { FloatLabel } from 'primereact/floatlabel';
+import { Dropdown } from 'primereact/dropdown';
 import { Dialog } from 'primereact/dialog';
 
-const ENDPOINT = "";
+const ENDPOINT = "/home";
 
-function Home({ toastRef, subjects, setEditingTask }) {
+const taskColumns = ["Type", "Subject", "Date"];
+
+export default function Home({ toastRef, subjects, setEditingTask }) {
   const [tasks, setTasks] = useState(null);
   const [visible, setVisible] = useState(false);
+
+  const [order, setOrder] = useState("Date");
 
   useEffect(() => {
     async function readTasks() {
@@ -25,6 +31,19 @@ function Home({ toastRef, subjects, setEditingTask }) {
     readTasks();
   }, []);
   
+  useEffect(() => {
+    if (tasks) {
+      const sortedTasks = [...tasks].sort((a, b) => {
+        switch (order) {
+          case "Type": return compare(a.typeId, b.typeId);
+          case "Subject": return compare(a.subjectId, b.subjectId);
+          default: return compare(a.date, b.date);
+        }
+      });
+      setTasks(sortedTasks);
+    }
+  }, [order]);
+
   return (
     <>
       <div className="centralize">
@@ -32,9 +51,16 @@ function Home({ toastRef, subjects, setEditingTask }) {
       </div>
       {tasks && subjects ? (
         <>
-          <Link to="/create">
-            <Button className="create-button" label="Create new task" icon="pi pi-plus" raised />
-          </Link>
+          <div className="main-buttons">
+            <Link to="/create">
+              <Button className="create-button" label="Create new task" icon="pi pi-plus" raised />
+            </Link>
+            <FloatLabel>
+              <Dropdown value={order} onChange={(e) => setOrder(e.value)} options={taskColumns} optionLabel="name"
+                        placeholder="Select Type" checkmark={true} highlightOnSelect={true} />
+              <label>Order by...</label>
+            </FloatLabel>
+          </div>
           
           {(tasks.length === 0 ? (
             <p className="no-task-p">No tasks created.</p>
@@ -89,4 +115,14 @@ function Home({ toastRef, subjects, setEditingTask }) {
   );
 }
 
-export default Home;
+function compare(a, b) {
+  if ( a < b ){
+    return -1;
+  }
+
+  if ( a > b ){
+    return 1;
+  }
+
+  return 0;
+}
