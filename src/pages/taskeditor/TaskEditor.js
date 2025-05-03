@@ -10,7 +10,7 @@ import { Button } from 'primereact/button';
 import { Calendar } from 'primereact/calendar';
 import { Link, useNavigate } from 'react-router-dom';
 
-function TaskEditor({ toastRef, subjects, editingTask, setEditingTask }) {
+export default function TaskEditor({ toastRef, subjects, editingTask, setEditingTask }) {
   const [selectedType, setSelectedType] = useState(null);
   const [selectedSubject, setSelectedSubject] = useState(null);
   const [description, setDescription] = useState("");
@@ -61,8 +61,8 @@ function TaskEditor({ toastRef, subjects, editingTask, setEditingTask }) {
           </FloatLabel>
           <FloatLabel>
             <InputText value={description} onChange={(e) => {
-              if(e.target.value.length > 49) {
-                e.target.value = e.target.value.substring(0, 50)
+              if(e.target.value.length > 63) {
+                e.target.value = e.target.value.substring(0, 64)
               }
               setDescription(e.target.value);
             }}/>
@@ -125,5 +125,3 @@ function getKeyByValue(map, searchValue) {
       return key;
   }
 }
-
-export default TaskEditor;
