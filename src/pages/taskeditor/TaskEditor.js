@@ -52,12 +52,12 @@ export default function TaskEditor({ toastRef, subjects, editingTask, setEditing
           <FloatLabel>
             <Dropdown value={selectedType} onChange={(e) => setSelectedType(e.value)} options={types} optionLabel="name"
                       placeholder="Select Type" checkmark={true} highlightOnSelect={true} />
-            <label htmlFor="dd-city">Type</label>
+            <label>Type</label>
           </FloatLabel>
           <FloatLabel>
             <Dropdown value={selectedSubject} onChange={(e) => setSelectedSubject(e.value)} options={subjects} optionLabel="name"
                       placeholder="Select Subject" checkmark={true} highlightOnSelect={true} />
-            <label htmlFor="dd-city">Subject</label>
+            <label>Subject</label>
           </FloatLabel>
           <FloatLabel>
             <InputText value={description} onChange={(e) => {
@@ -66,11 +66,11 @@ export default function TaskEditor({ toastRef, subjects, editingTask, setEditing
               }
               setDescription(e.target.value);
             }}/>
-            <label htmlFor="description">Description</label>
+            <label>Description</label>
           </FloatLabel>
           <FloatLabel>
             <Calendar value={date} onChange={(e) => setDate(e.value)} dateFormat="dd/mm/yy"/>
-            <label htmlFor="dd-city">Date</label>
+            <label>Date</label>
           </FloatLabel>
         </div>
 

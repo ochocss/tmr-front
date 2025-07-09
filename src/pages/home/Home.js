@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import { FloatLabel } from 'primereact/floatlabel';
 import { Dropdown } from 'primereact/dropdown';
 import { Dialog } from 'primereact/dialog';
+import { Checkbox } from 'primereact/checkbox';
 
 const ENDPOINT = "/home";
 
@@ -15,6 +16,7 @@ const taskColumns = ["Type", "Subject", "Date"];
 
 export default function Home({ toastRef, subjects, setEditingTask }) {
   const [tasks, setTasks] = useState(null);
+  const [checked, setChecked] = useState(false);
   const [visible, setVisible] = useState(false);
 
   const [order, setOrder] = useState("Date");
@@ -74,6 +76,7 @@ export default function Home({ toastRef, subjects, setEditingTask }) {
                 <p><strong>Days left: </strong> {((new Date(task.date) - new Date()) / (1000 * 60 * 60 * 24)).toFixed(0)} days</p>
               </div>
               <div className="buttons">
+                <Checkbox onChange={e => task.done = e.value} checked={task.done}></Checkbox>
                 <Link to="/edit"><Button className="edit-button" type="button" icon="pi pi-file-edit" label="Edit"
                   onClick={() => {
                     setEditingTask(task);
